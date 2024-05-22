@@ -1,3 +1,4 @@
+// Tutorial for pre-processing of Sentinel-1 data
 var sentinel1 = ee.ImageCollection("COPERNICUS/S1_GRD");
 
 var collection = sentinel1.filterBounds(geometry)
