@@ -1,21 +1,21 @@
-var sentinel1 = ee.ImageCollection("COPERNICUS/S1_GRD")
+var sentinel1 = ee.ImageCollection("COPERNICUS/S1_GRD");
 
 var collection = sentinel1.filterBounds(geometry)
-.filterDate('2021-01-01','2021-12-31')
-.filter(ee.Filter.listContains('transmitterRecieverPolarisation','VV'))
-.filter(ee.Filter.listContains('transmitterRecieverPolarisation','VH'))
-.filter(ee.Filter.eq('instrumentMode','IW'))
+  .filterDate('2021-01-01', '2021-12-31')
+  .filter(ee.Filter.listContains('transmitterReceiverPolarisation', 'VV'))
+  .filter(ee.Filter.listContains('transmitterReceiverPolarisation', 'VH'))
+  .filter(ee.Filter.eq('instrumentMode', 'IW'));
 
-var desc = collection.filter(ee.Filter.eq('orbitProperties_pass','DESCENDING'))
-var asc = collection.filter(ee.Filter.eq('orbitProperties_pass','DESCENDING'))
-print(desc.size())
-print(asc.size())
+var desc = collection.filter(ee.Filter.eq('orbitProperties_pass', 'DESCENDING'));
+var asc = collection.filter(ee.Filter.eq('orbitProperties_pass', 'ASCENDING'));
+print('Descending size:', desc.size());
+print('Ascending size:', asc.size());
 
 var composite = ee.Image.cat([
-  asc.select('VV').mean(),
-  asc.select('VH').mean(),
-  desc.select('VH').mean()
-]).focal_median()
+  asc.select('VV').mean().rename('VV_asc_mean'),
+  asc.select('VH').mean().rename('VH_asc_mean'),
+  desc.select('VH').mean().rename('VH_desc_mean')
+]).focal_median();
 
-Map.addLayer(composite.clip(geometry),'RGB Sentinel-1 composite')
-Map.centerObject(geometry)
+Map.addLayer(composite.clip(geometry), {bands: ['VV_asc_mean', 'VH_asc_mean', 'VH_desc_mean'], min: -25, max: 5}, 'RGB Sentinel-1 composite');
+Map.centerObject(geometry);
