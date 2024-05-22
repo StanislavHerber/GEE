@@ -1,0 +1,21 @@
+var sentinel1 = ee.ImageCollection("COPERNICUS/S1_GRD")
+
+var collection = sentinel1.filterBounds(geometry)
+.filterDate('2021-01-01','2021-12-31')
+.filter(ee.Filter.listContains('transmitterRecieverPolarisation','VV'))
+.filter(ee.Filter.listContains('transmitterRecieverPolarisation','VH'))
+.filter(ee.Filter.eq('instrumentMode','IW'))
+
+var desc = collection.filter(ee.Filter.eq('orbitProperties_pass','DESCENDING'))
+var asc = collection.filter(ee.Filter.eq('orbitProperties_pass','DESCENDING'))
+print(desc.size())
+print(asc.size())
+
+var composite = ee.Image.cat([
+  asc.select('VV').mean(),
+  asc.select('VH').mean(),
+  desc.select('VH').mean()
+]).focal_median()
+
+Map.addLayer(composite.clip(geometry),'RGB Sentinel-1 composite')
+Map.centerObject(geometry)
