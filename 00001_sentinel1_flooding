@@ -16,7 +16,7 @@ Map.centerObject(roi);
 
 // Define time period
 var year_start = '2019'
-year_end = '2020'
+var year_end = '2020'
 
 function speckel(img){
   return img.focalMedian(100, 'square', 'meters')
