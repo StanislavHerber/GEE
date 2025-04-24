@@ -1,0 +1,269 @@
+//=======================================
+// Úvod do Google Earth Engine (GEE)
+// Lekce: Práce s rasterovými daty
+// Autor: Stanislav Herber
+//=======================================
+
+//--------skript 1 (zaklady)
+
+// vytvoreni promenne pomoci var
+var jmeno = 'Petr';
+var seznam = ['Petr','Adam','Ondra'];
+var box = {height:5, width:10, color:'blue'};
+
+// zobrazeni hodnot prommene v konzoli
+print(jmeno);
+print(seznam);
+print(box);
+
+//--------skript 2 (nacteni SRTM image)
+
+//nacteni jednoho SRTM snimku pomoci ee.Image()
+var image = ee.Image('CGIAR/SRTM90_V4');
+print(image)
+
+//zoom na danou lokalitu - Grand Canyon
+Map.setCenter(-112.8598, 36.2841, 9);
+//Map.centerObject(image)
+
+//vložim snímek do mapy
+Map.addLayer(image);
+
+//--------skript 3 (uprava hodnot SRTM)
+
+//nacteni jednoho SRTM snimku pomoci ee.Image()
+var image = ee.Image('CGIAR/SRTM90_V4');
+
+//zoom na danou lokalitu
+Map.setCenter(-112.8598, 36.2841, 9);
+
+//vložim snímek do mapy a upravím rozsah hodnot, který se zobrazí
+Map.addLayer(image, {min:0, max:3000});
+
+//--------skript 4 (uprava barevne skaly)
+
+//nacteni jednoho SRTM snimku pomoci ee.Image()
+var image = ee.Image('CGIAR/SRTM90_V4');
+
+//zoom na danou lokalitu
+Map.setCenter(-112.8598, 36.2841, 9);
+
+//vložim snímek do mapy a upravím rozsah hodnot, který se zobrazí
+Map.addLayer(image, {min:0, max:3000, palette:['blue','green','red']}, 'Snimek s upravenou barevnou skalou');
+
+//--------skript 5 (vlastni barevna skala)
+
+//nacteni jednoho SRTM snimku pomoci ee.Image()
+var image = ee.Image('CGIAR/SRTM90_V4');
+
+//zoom na danou lokalitu
+Map.setCenter(-112.8598, 36.2841, 9);
+
+//vložim snímek do mapy a upravím rozsah hodnot, který se zobrazí
+Map.addLayer(image, {min:0, max:3000, palette:['26FD00','FDF900','FDB400','FD0000']}, 'Snimek s vlastni barevnou skalou');
+print(image)
+
+//--------skript 6 (vypocet modelu sklonitosti)
+//nacteni jednoho SRTM snimku pomoci ee.Image()
+var image = ee.Image('CGIAR/SRTM90_V4');
+
+//zoom na danou lokalitu
+Map.setCenter(-112.8598, 36.2841, 9);
+
+//vypocet modelu sklonitosti
+var sklonitost = ee.Terrain.slope(image)
+
+//zoom na danou lokalitu
+Map.setCenter(-112.8598, 36.2841, 9);
+
+//lepší barevná škála pro model sklonitosti
+var skala1 = ['white','blue','red','black']
+var skala2 = ['green','yellow','red']
+var skala3 = ['440154', '404387', '29788E', '22A784', '79D151', 'FDE724']
+var skala4 = ['000004', '270A3F', '6A176E', 'B73779', 'EC6B64', 'FCAE91', 'FEEBC8']
+
+//vložím snímek do mapy a upravím rozsah hodnot
+Map.addLayer(sklonitost,{min:0, max:60, palette:skala1},'Model sklonitosti ze SRTM');
+
+//-------skript 7 (lepsi vizualizace modelu sklonitosti)
+
+//pro zajimavou vizualizaci je mozne vyuzit hillshade a udelat vrstvu pruhlednou
+var hillshade = ee.Terrain.hillshade(image)
+
+var hillshadeVis = {
+  min: 50,
+  max: 255,
+  palette: ['black', 'white']
+};
+
+Map.addLayer(hillshade,hillshadeVis,'Hillshade ze SRTM');
+
+//-------skript 8 (tvorba geometrie a clip)
+
+// rucne definovanym polygonem oříznu raster
+var orez = sklonitost.clip(geometry)
+
+//vložim do mapy
+Map.addLayer(orez,{},'sklonitost orez')
+
+// druhá možnost připadně je možné definovat polygon souřadnicemi
+var rect = ee.Geometry.Rectangle(0, 0, 60, 30);
+var polygon = ee.Geometry.Polygon([[-112.59842403442657,36.24230473307975],[-112.47208126098907,36.16251742698045],[-112.27432735473907,36.0715495453884],[-111.83846408801627,36.03034778634629],[-111.87966281848502,35.97257604234978],[-111.89888889270377,35.92143499858367],[-111.72860080676627,35.90586376410532],[-111.70113498645377,36.008132893762216],[-111.73684055286002,36.04811519107058],[-111.96480686145377,36.207841324746695],[-112.04995090442252,36.23221529508867],[-112.15157443957877,36.265440286408634],[-112.20925266223502,36.247722048972435],[-112.22573215442252,36.29201010690698],[-112.23946506457877,36.3318478772163],[-112.34658176379752,36.3318478772163],[-112.39327365832877,36.318570882276276],[-112.34932834582877,36.39377726946606],[-112.45919162707877,36.46670218753276],[-112.52510959582877,36.422513445271406],[-112.55257541614127,36.35839507996954],[-112.59842403442657,36.24230473307975]])
+
+var orez2 = sklonitost.clip(rect)
+var orez3 = sklonitost.clip(polygon)
+
+Map.addLayer(orez2.clip(polygon),{},'sklonitost clip podle ctverce')
+Map.addLayer(orez3.clip(polygon),{},'sklonitost clip podle polygonu')
+
+//-------skript 9 (změna barevné kombinace rasterů)
+
+//nacteni konkretniho snimku z druzice Landsat 8 - 36 den 2015 -> 18.3.2014, pobřeží San Francisko
+var snimek = ee.Image('LANDSAT/LC08/C02/T1_TOA/LC08_044034_20140318');
+print(snimek)
+Map.centerObject(snimek)
+
+//zobrazeni snimku v prirozenych barvach
+var vizParams = {
+  bands: ['B4', 'B3', 'B2'],
+  min: 0,
+  max: 0.5,
+  gamma: [0.95, 1.1, 1]
+};
+
+//Color infrared: Vegetation pops in red ['B5','B4','B3']
+
+var infraredParams = {
+  bands: ['B5', 'B4', 'B3'],
+  min: 0,
+  max: 0.5,
+  gamma: [0.95, 1.1, 1]
+};
+
+//False color: Shows floods or newly burned land [B7,B5,B3]
+
+var falsecolorParams = {
+  bands: ['B7', 'B5', 'B3'],
+  min: 0,
+  max: 0.5,
+  gamma: [0.95, 1.1, 1]
+};
+
+//False color: Differentiates between snow, ice, and clouds ['B2','B6','B7']
+
+var snowParams = {
+  bands: ['B2', 'B6', 'B7'],
+  min: 0,
+  max: 0.5,
+  gamma: [0.95, 1.1, 1]
+};
+
+// False color vegetation: ['B6','B5','B2']
+
+var falsecolorvegetationParams = {
+  bands: ['B6', 'B5', 'B2'],
+  min: 0,
+  max: 0.5,
+  gamma: [0.95, 1.1, 1]
+};
+
+// False urban: ['B7','B6','B4']
+
+var urbanParams = {
+  bands: ['B7', 'B6', 'B4'],
+  min: 0,
+  max: 0.5,
+  gamma: [0.95, 1.1, 1]
+};
+
+// False color Land Water: ['B5','B6','B4']
+
+var landwaterParams = {
+  bands: ['B5', 'B6', 'B4'],
+  min: 0,
+  max: 0.5,
+  gamma: [0.95, 1.1, 1]
+};
+
+Map.addLayer(snimek, vizParams, 'Snimek Landsat 8 RGB');
+//Map.addLayer(snimek, infraredParams, 'Snimek Landsat 8 Infrared');
+//Map.addLayer(snimek, falsecolorParams, 'Snimek Landsat 8 False color');
+//Map.addLayer(snimek, snowParams, 'Snimek Landsat 8 Snow');
+//Map.addLayer(snimek, falsecolorvegetationParams, 'Snimek Landsat 8 False color vegetation');
+//Map.addLayer(snimek, urbanParams, 'Snimek Landsat 8 False Color Urban');
+//Map.addLayer(snimek, landwaterParams, 'Snimek Landsat 8 Land Water');
+
+//-------skript 10 (využití kolekce MODIS) (využití kolekce MODIS-NDVI a EVI rozlišení 500m)
+
+var MODIS = ee.ImageCollection('MODIS/061/MOD13A1')
+                  .filter(ee.Filter.date('2018-01-01', '2018-05-01'));
+var ndvi = MODIS.select('NDVI');
+var evi = MODIS.select('EVI');
+
+var ndviVis = {
+  min: 0,
+  max: 9000,
+  palette: [
+    'ffffff', 'ce7e45', 'df923d', 'f1b555', 'fcd163', '99b718', '74a901',
+    '66a000', '529400', '3e8601', '207401', '056201', '004c00', '023b01',
+    '012e01', '011d01', '011301'
+  ],
+};
+Map.setCenter(-112.8598, 36.2841, 9);
+Map.addLayer(ndvi, ndviVis, 'NDVI Grand Canyon');
+Map.addLayer(evi, ndviVis, 'EVI Grand Canyon');
+
+//-------skript 11 (využití kolekce Landsat 8 (bez atmo. korekci))
+
+var LC08 = ee.ImageCollection('LANDSAT/LC08/C02/T1_TOA')
+  .filterDate('2017-01-01', '2017-12-31');
+var trueColor432 = LC08.select(['B4', 'B3', 'B2']);
+var trueColor432Vis = {
+  min: 0.0,
+  max: 0.4,
+};
+Map.setCenter(-112.8598, 36.2841, 9);
+Map.addLayer(trueColor432, trueColor432Vis, 'Landsat 8 (true color) Grand Canyon');
+
+//-------skript 12 (využití kolekce Sentinel-2)
+
+var S2 = ee.ImageCollection('COPERNICUS/S2_SR')
+                  .filterDate('2020-01-01', '2020-01-30')
+                  // Pre-filter to get less cloudy granules.
+                  .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE',20))
+
+var visualization = {
+  min: 0,
+  max: 3000,
+  bands: ['B4', 'B3', 'B2'],
+};
+
+Map.setCenter(-112.8598, 36.2841, 9);
+
+Map.addLayer(S2, visualization, 'Sentinel 2 (true color) Grand Canyon');
+
+//-------skript 13 (Porovnání nefiltrovaných a filtrovaných snímků Sentinel-2)
+// Kolekce Sentinel-2 bez filtru na oblačnost
+var S2_unfiltered = ee.ImageCollection("COPERNICUS/S2_SR")
+  .filterDate("2020-01-01", "2020-01-30")
+  .filterBounds(ee.Geometry.Point([-112.8598, 36.2841]));
+
+// Kolekce Sentinel-2 s filtrem na oblačnost < 20 %
+var S2_filtered = ee.ImageCollection("COPERNICUS/S2_SR")
+  .filterDate("2020-01-01", "2020-01-30")
+  .filter(ee.Filter.lt("CLOUDY_PIXEL_PERCENTAGE", 20))
+  .filterBounds(ee.Geometry.Point([-112.8598, 36.2841]));
+
+// Vizualizační parametry
+var visualization = {
+  min: 0,
+  max: 3000,
+  bands: ["B4", "B3", "B2"]
+};
+
+// Nastavení mapy
+Map.setCenter(-112.8598, 36.2841, 9);
+
+// Přidání prvního snímku z obou kolekcí na mapu
+Map.addLayer(S2_unfiltered.first(), visualization, "S2 bez filtru");
+Map.addLayer(S2_filtered.first(), visualization, "S2 filtr <20% oblačnost");
