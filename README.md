@@ -67,8 +67,7 @@
 
 ## ✍️ Autor
 
-Repozitář spravuje **Standa**, doktorand v oblasti GIS a dálkového průzkumu Země.  
-Cílem je vytvořit udržitelný a opakovaně použitelný zdroj pro osobní i výukové účely.
+Thie repository is mantained by Ing. Stanislav Herber
 
 ---
 
