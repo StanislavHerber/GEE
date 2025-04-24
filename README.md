@@ -1,5 +1,6 @@
-![Google Earth Engine Banner]("C:\Users\stand\Downloads\Vincular-Google-Earth-Engine-al-Google-Cloud.jpg")
+![Vincular-Google-Earth-Engine-al-Google-Cloud](https://github.com/user-attachments/assets/234f9758-b153-4aa2-a751-ee93d8872903)
 # 🌍 Google Earth Engine Hub
+
 
 ## 📁 Struktura repozitáře
 
@@ -31,9 +32,7 @@
 
 ### 📺 Výukové materiály
 
-- [📹 GEE YouTube kanál](https://www.youtube.com/c/GoogleEarthEngine)
-- [📚 Earth Engine Training (by Google)](https://developers.google.com/earth-engine/tutorials)
-- [📘 Earth Engine for Beginners (book)](https://geemap.org/gee_book/)
+- [Earth Engine Training (by Google)](https://developers.google.com/earth-engine/tutorials)
 
 ---
 
