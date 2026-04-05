@@ -33,7 +33,7 @@ This repository stores scripts and methodologies developed for my **PhD thesis**
 ---
 
 ## Teaching
-* 🔗 [**Exercise 1 Introduction to GEE (2025)**](GEE_cv1_potrebne_skripty_2025.js)
+* 🔗 [Exercise 1 – Introduction to GEE (2025)](./GEE_cv1_potrebne_skripty_2025.js)
 * 🔗 [View NDVI Script](./scripts/ndvi_analysis.js)
 ---
 
