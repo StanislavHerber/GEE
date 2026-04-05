@@ -20,7 +20,7 @@ This repository stores scripts and methodologies developed for my **PhD thesis**
 
 ### Project Name Two
 *Focus: [Insert a brief one-sentence description of this project here]*
-* 🔗 [**Access Project Folder**](./scripts/GEE_cv1_potrebne_skripty_2025.txt)
+* 🔗 [**Exercise 1 – Introduction to GEE (2026)**](GEE_cv1_2026.js)
 
 ---
 
