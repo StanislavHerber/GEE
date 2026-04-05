@@ -20,7 +20,7 @@ This repository stores scripts and methodologies developed for my **PhD thesis**
 
 ### Project Name Two
 *Focus: [Insert a brief one-sentence description of this project here]*
-* 🔗 [**Access Project Folder**](./projects/project-two)
+* 🔗 [**Access Project Folder**](./scripts/GEE_cv1_potrebne_skripty_2025.txt)
 
 ---
 
@@ -30,6 +30,11 @@ This repository stores scripts and methodologies developed for my **PhD thesis**
 * **Analysis:** Vegetation dynamics (NDVI, NDMI, EVI) and time-series trend detection.
 * **Automation:** Developing reproducible pipelines for large-scale data processing.
 
+---
+
+## Teaching
+* 🔗 [**Exercise 1 Introduction to GEE (2025)**](./scripts/GEE_cv1_potrebne_skripty_2025.txt)
+* 🔗 [View NDVI Script](./scripts/ndvi_analysis.js)
 ---
 
 ## ✍️ Author
