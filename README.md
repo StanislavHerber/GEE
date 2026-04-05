@@ -20,7 +20,6 @@ This repository stores scripts and methodologies developed for my **PhD thesis**
 
 ### Project Name Two
 *Focus: [Insert a brief one-sentence description of this project here]*
-* 🔗 [**Exercise 1 – Introduction to GEE (2026)**](GEE_cv1_2026.js)
 
 ---
 
@@ -33,8 +32,7 @@ This repository stores scripts and methodologies developed for my **PhD thesis**
 ---
 
 ## Teaching
-* 🔗 [Exercise 1 – Introduction to GEE (2025)](./GEE_cv1_potrebne_skripty_2025.js)
-* 🔗 [View NDVI Script](./scripts/ndvi_analysis.js)
+* 🔗 [**Exercise 1 – Introduction to GEE (2026)**](GEE_cv1_2026.js)
 ---
 
 ## ✍️ Author
